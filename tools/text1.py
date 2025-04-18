@@ -38,7 +38,7 @@ for gua in names:
 
     time.sleep(0.5)
 
-with open('hexagrams_texts.json', 'w', encoding='utf-8') as f:
+with open('hexagrams_text.json', 'w', encoding='utf-8') as f:
     json.dump(gua_texts, f, ensure_ascii=False, indent=4)
 
 print("✅ All gua texts have been retrieved and saved.")

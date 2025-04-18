@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <title>易经卦象展示</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div id="main-hexagram" class="hexagram"></div>
+
+    <div class="section">
+        <div id="texts"></div>
+    </div>
+
+    <div class="section">
+        <div class="related">
+            <div class="related-hex">
+                <h3>互卦</h3>
+                <div id="mutual-hexagram" class="hexagram"></div>
+            </div>
+            <div class="related-hex">
+                <h3>错卦</h3>
+                <div id="reverse-hexagram" class="hexagram"></div>
+            </div>
+            <div class="related-hex">
+                <h3>综卦</h3>
+                <div id="inverse-hexagram" class="hexagram"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { displayHexagram } from './hexagram.js';
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            displayHexagram("屯");
+        });
+    </script>
+
+</body>
+
+</html>

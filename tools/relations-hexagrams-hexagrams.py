@@ -37,8 +37,8 @@ def invert(binary):
 
 def mutual(binary):
     # 中间四爻（第2~5位）变为新卦的外卦和内卦
-    inner = binary[1:4]
-    outer = binary[2:5]
+    outer = binary[1:4]
+    inner = binary[2:5]
     return outer + inner
 
 relations = []

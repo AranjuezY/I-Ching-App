@@ -9,7 +9,7 @@ conn = sqlite3.connect('../test.db')
 cursor = conn.cursor()
 
 # 载入JSON文件
-with open('hexagrams_texts.json', 'r', encoding='utf-8') as f:
+with open('hexagrams_text.json', 'r', encoding='utf-8') as f:
     gua_texts = json.load(f)
 
 # 写入 texts 表
