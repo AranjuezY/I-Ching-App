@@ -9,11 +9,11 @@ base_url = "https://api.ctext.org/gettext?urn=ctp:book-of-changes/"
 names = [
   "qian", "kun", "zhun", "meng", "xu", "song", "shi", "bi",
   "xiao-xu", "lu", "tai", "pi", "tong-ren", "da-you", "qian1", "yu",
-  "sui", "gu", "lin", "guan", "shi-he", "bi", "bo", "fu",
-  "wu-wang", "da-xu", "yi", "da-guo", "kan", "li", "xian", "heng",
+  "sui", "gu", "lin", "guan", "shi-he", "bi1", "bo", "fu",
+  "wu-wang", "da-xu", "yi1", "da-guo", "kan", "li", "xian", "heng",
   "dun", "da-zhuang", "jin", "ming-yi", "jia-ren", "kui", "jian", "xie",
   "sun", "yi", "guai", "gou", "cui", "sheng", "kun", "jing",
-  "ge", "ding", "zhen", "gen", "jian", "gui-mei", "feng", "lu1",
+  "ge", "ding", "zhen", "gen", "jian1", "gui-mei", "feng", "lu1",
   "xun", "dui", "huan", "jie1", "zhong-fu", "xiao-guo", "ji-ji", "wei-ji"
 ]
 

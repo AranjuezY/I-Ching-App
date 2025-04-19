@@ -11,9 +11,16 @@ export async function fetchHexagram(name) {
     }
 }
 
-export function renderHexagram(containerId, binary) {
+export function renderHexagram(containerId, binary, name) {
     const container = document.getElementById(containerId);
+    container.innerHTML = '';
     if (!container || !binary) return;
+
+    if (name) {
+        const nameEl = document.createElement('h1');
+        nameEl.textContent = name;
+        container.appendChild(nameEl);
+    }
 
     for (let i = 5; i >= 0; i--) {
         const div = document.createElement('div');
@@ -42,32 +49,14 @@ export async function displayHexagram(name) {
         if (!data) return;
 
         // Main hexagram
-        const main = document.getElementById("main-hexagram");
-        const div_main = document.createElement('h1');
-        div_main.innerHTML = data.name;
-        main.append(div_main);
-        renderHexagram("main-hexagram", data.binary);
+        renderHexagram("main-hexagram", data.binary, data.name);
         renderTexts([...(data.guaci || []), ...(data.yaoci || [])]);
 
         // Related hexagrams
         if (data.relations) {
-            const mutual = document.getElementById("mutual-hexagram");
-            const div_mutual = document.createElement('h1');
-            div_mutual.innerHTML = data.relations.mutual.name;
-            mutual.append(div_mutual);
-            renderHexagram("mutual-hexagram", data.relations.mutual.binary);
-            
-            const reverse = document.getElementById("reverse-hexagram");
-            const div_reverse = document.createElement('h1');
-            div_reverse.innerHTML = data.relations.reverse.name;
-            reverse.append(div_reverse);
-            renderHexagram("reverse-hexagram", data.relations.reverse.binary);
-            
-            const inverse = document.getElementById("inverse-hexagram");
-            const div_inverse = document.createElement('h1');
-            div_inverse.innerHTML = data.relations.inverse.name;
-            inverse.append(div_inverse);
-            renderHexagram("inverse-hexagram", data.relations.inverse.binary);
+            renderHexagram("mutual-hexagram", data.relations.mutual.binary, data.relations.mutual.name);
+            renderHexagram("reverse-hexagram", data.relations.reverse.binary, data.relations.reverse.name);
+            renderHexagram("inverse-hexagram", data.relations.inverse.binary, data.relations.inverse.name);
         }
     } catch (error) {
         console.error('Error displaying hexagram:', error);

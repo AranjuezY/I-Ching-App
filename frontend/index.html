@@ -9,6 +9,8 @@
 
 <body>
 
+    <div class="hexagrams" style="display: flex;"></div>
+
     <div id="main-hexagram" class="hexagram"></div>
 
     <div class="section">
@@ -35,9 +37,46 @@
     <script type="module">
         import { displayHexagram } from './hexagram.js';
         
-        // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', () => {
-            displayHexagram("屯");
+            const nav = document.querySelector('.hexagrams');
+            
+            // Fetch all hexagrams from API
+            fetch('http://localhost:5000/api/hexagrams')
+                .then(response => response.json())
+                .then(hexagrams => {
+                    // Create two rows for hexagrams
+                    const row1 = document.createElement('div');
+                    const row2 = document.createElement('div');
+                    row1.className = 'hexagram-row';
+                    row2.className = 'hexagram-row';
+                    
+                    // Split hexagrams into two groups
+                    const half = Math.ceil(hexagrams.length / 2);
+                    const firstHalf = hexagrams.slice(0, half);
+                    const secondHalf = hexagrams.slice(half);
+                    
+                    // Add hexagrams to rows
+                    firstHalf.forEach(hex => {
+                        const hexEl = document.createElement('div');
+                        hexEl.className = 'hexagram-nav';
+                        hexEl.textContent = hex.name;
+                        hexEl.addEventListener('click', () => displayHexagram(hex.name));
+                        row1.appendChild(hexEl);
+                    });
+                    
+                    secondHalf.forEach(hex => {
+                        const hexEl = document.createElement('div');
+                        hexEl.className = 'hexagram-nav';
+                        hexEl.textContent = hex.name;
+                        hexEl.addEventListener('click', () => displayHexagram(hex.name));
+                        row2.appendChild(hexEl);
+                    });
+                    
+                    // Add rows to nav
+                    nav.appendChild(row1);
+                    nav.appendChild(row2);
+                })
+                .catch(error => console.error('Error fetching hexagrams:', error));
         });
     </script>
 

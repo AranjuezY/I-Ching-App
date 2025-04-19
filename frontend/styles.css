@@ -52,3 +52,14 @@ h1, h2 {
 .related-hex {
     text-align: center;
 }
+
+.hexagrams {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+}
+
+.hexagram-row {
+    display: flex;
+    justify-content: space-around;
+}
