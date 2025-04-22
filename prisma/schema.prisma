@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model hexagram_relations {
+  hexagram_id                                         Int        @id
+  inverted_id                                         Int?
+  opposite_id                                         Int?
+  mutual_id                                           Int?
+  hexagrams_hexagram_relations_hexagram_idTohexagrams hexagrams  @relation("hexagram_relations_hexagram_idTohexagrams", fields: [hexagram_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  hexagrams_hexagram_relations_inverted_idTohexagrams hexagrams? @relation("hexagram_relations_inverted_idTohexagrams", fields: [inverted_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  hexagrams_hexagram_relations_mutual_idTohexagrams   hexagrams? @relation("hexagram_relations_mutual_idTohexagrams", fields: [mutual_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  hexagrams_hexagram_relations_opposite_idTohexagrams hexagrams? @relation("hexagram_relations_opposite_idTohexagrams", fields: [opposite_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model hexagrams {
+  id                                                           Int                   @id @default(autoincrement())
+  hexagram_name                                                String
+  hexagram_sequence                                            String
+  upper_trigram                                                String?
+  lower_trigram                                                String?
+  hexagram_relations_hexagram_relations_hexagram_idTohexagrams hexagram_relations?   @relation("hexagram_relations_hexagram_idTohexagrams")
+  hexagram_relations_hexagram_relations_inverted_idTohexagrams hexagram_relations[]  @relation("hexagram_relations_inverted_idTohexagrams")
+  hexagram_relations_hexagram_relations_mutual_idTohexagrams   hexagram_relations[]  @relation("hexagram_relations_mutual_idTohexagrams")
+  hexagram_relations_hexagram_relations_opposite_idTohexagrams hexagram_relations[]  @relation("hexagram_relations_opposite_idTohexagrams")
+  text_hexagram_links                                          text_hexagram_links[]
+  yaos                                                         yaos[]
+}
+
+model text_hexagram_links {
+  id          Int       @id @default(autoincrement())
+  text_id     Int
+  hexagram_id Int
+  hexagrams   hexagrams @relation(fields: [hexagram_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  texts       texts     @relation(fields: [text_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model text_yao_links {
+  id      Int   @id @default(autoincrement())
+  text_id Int
+  yao_id  Int
+  texts   texts @relation(fields: [text_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  yaos    yaos  @relation(fields: [yao_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model texts {
+  id                  Int                   @id @default(autoincrement())
+  source              String
+  section             String?
+  content             String
+  text_hexagram_links text_hexagram_links[]
+  text_yao_links      text_yao_links[]
+}
+
+model trigrams {
+  id                Int    @id @default(autoincrement())
+  hexagram_name     String
+  hexagram_sequence String @unique
+}
+
+model yaos {
+  id             Int              @id @default(autoincrement())
+  hexagram_id    Int
+  position       Int
+  label          String?
+  text_yao_links text_yao_links[]
+  hexagrams      hexagrams        @relation(fields: [hexagram_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
