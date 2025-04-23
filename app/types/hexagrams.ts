@@ -1,3 +1,9 @@
+export interface HexagramName {
+  id: number
+  name: string
+  sequence: string
+}
+
 export interface HexagramData {
   name: string
   sequence: string
