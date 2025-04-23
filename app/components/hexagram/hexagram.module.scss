@@ -1,0 +1,41 @@
+.hexagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem; /* Doubled padding */
+
+  .sequence-diagram {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem; /* Doubled margin */
+    width: 6rem; /* Doubled container width */
+  }
+
+  .line {
+    height: 0.5rem; /* Doubled line height */
+    margin: 0.3rem 0; /* Doubled margin */
+    display: flex;
+  }
+
+  .yang {
+    width: 100%; /* Yang line fills the container */
+    background-color: goldenrod;
+  }
+
+  .yin {
+    justify-content: space-between; /* Distribute the two shorter dashes */
+
+    &::before,
+    &::after {
+      content: "";
+      width: 2.4rem; /* Doubled width of each shorter yin dash */
+      height: 0.5rem; /* Doubled height of each shorter yin dash */
+      background-color: #333;
+    }
+  }
+
+  h3 {
+    margin-top: 0;
+    font-size: 2.4rem; /* Doubled font size */
+  }
+}

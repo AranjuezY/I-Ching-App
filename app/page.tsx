@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { HexagramData } from './types/hexagrams'
-import ShowCase from './components/showcase'
+import ShowCase from './components/showcase/showcase'
 
 export default function Page() {
   const [hexagram, setHexagram] = useState<HexagramData | null>(null)
@@ -11,7 +11,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/hexagrams/1')
+        const response = await fetch('/api/hexagrams/3')
         const data = await response.json()
         console.log(data)
         setHexagram(data)

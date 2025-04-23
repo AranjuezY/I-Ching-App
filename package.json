@@ -23,6 +23,7 @@
     "@types/node": "22.14.1",
     "@types/react": "19.1.2",
     "prisma": "^6.6.0",
+    "sass": "^1.87.0",
     "typescript": "5.8.3"
   }
 }
