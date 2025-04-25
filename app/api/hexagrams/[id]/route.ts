@@ -61,23 +61,14 @@ export async function GET(
 
   const guaci = hexagram.text_hexagram_links.map(link => ({
     source: link.texts.source,
-    content: link.texts.content
-  }))
-
-  const yaoci = hexagram.yaos.map(yao => ({
-    position: yao.position,
-    label: yao.label,
-    texts: yao.text_yao_links.map(link => ({
-      source: link.texts.source,
-      content: link.texts.content
-    }))
+    content: link.texts.content,
+    translation: link.texts.translation
   }))
 
   return NextResponse.json({
     name: hexagram.hexagram_name,
     sequence: hexagram.hexagram_sequence,
     guaci,
-    yaoci,
     relations
   })
 }

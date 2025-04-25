@@ -6,21 +6,19 @@ const prisma = new PrismaClient();
 
 async function seedTranslations() {
   try {
-    // const filePath = path.join(__dirname, '../data/results.json');
-    // const data = await fs.readFile(filePath, 'utf-8');
-    // const translations = JSON.parse(data);
+    const filePath = path.join(__dirname, '../data/results.json');
+    const data = await fs.readFile(filePath, 'utf-8');
+    const translations = JSON.parse(data).data;
 
-    // for (const [hexagramId, lines] of Object.entries(translations)) {
-    //   const hexagramNumber = parseInt(hexagramId.replace('ic', ''));
-      
-    //   for (const [index, text] of (lines as string[]).entries()) {
-    //     await prisma.texts.create({
-    //       data: {
-    //         translation: text
-    //       }
-    //     });
-    //   }
-    // }
+    for (const key in translations) {
+      const text = translations[key];
+      const textId = parseInt(key) + 1; // Convert array index to text ID (assuming 1-based IDs)
+
+      await prisma.texts.update({
+        where: { id: textId },
+        data: { translation: text }
+      });
+    }
 
     console.log('Finished seeding translations.');
   } catch (error) {
