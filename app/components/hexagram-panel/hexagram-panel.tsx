@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { HexagramName } from '../../types/hexagrams'
 import styles from './hexagram-panel.module.scss'
 
@@ -9,13 +10,20 @@ interface HexagramPanelProps {
 }
 
 export default function HexagramPanel({ allHexagrams, onHexagramClick }: HexagramPanelProps) {
+  const [isOpen, setIsOpen] = useState(false)
   // Split hexagrams into two rows of 32 each
   const firstRow = allHexagrams.slice(0, 32)
   const secondRow = allHexagrams.slice(32)
 
   return (
     <div className={styles['hexagram-panel']}>
-      <div className={styles['hexagram-row']}>
+      <button 
+        className={styles['dropdown-toggle']}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        Hexagrams
+      </button>
+      <div className={`${styles['hexagram-row']} ${isOpen ? styles['mobile-visible'] : ''}`}>
         {firstRow.map(h => (
           <a 
             key={h.id} 
@@ -30,7 +38,7 @@ export default function HexagramPanel({ allHexagrams, onHexagramClick }: Hexagra
           </a>
         ))}
       </div>
-      <div className={styles['hexagram-row']}>
+      <div className={`${styles['hexagram-row']} ${isOpen ? styles['mobile-visible'] : ''}`}>
         {secondRow.map(h => (
           <a 
             key={h.id} 

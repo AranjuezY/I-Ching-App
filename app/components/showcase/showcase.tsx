@@ -28,9 +28,9 @@ const ShowCase = ({ hexagram }: HexagramProps) => {
 
       {/* Related Hexagrams */}
       <div className={styles['related-hexagrams']}>
-        {renderRelatedHexagram(hexagram.relations.mutual, "互掛")}
-        {renderRelatedHexagram(hexagram.relations.reverse, "錯掛")}
-        {renderRelatedHexagram(hexagram.relations.inverse, "綜掛")}
+        {renderRelatedHexagram(hexagram.relations.mutual, "互掛 | Mutual")}
+        {renderRelatedHexagram(hexagram.relations.reverse, "錯掛 | Inverse")}
+        {renderRelatedHexagram(hexagram.relations.inverse, "綜掛 | Reverse")}
       </div>
     </div>
   )
