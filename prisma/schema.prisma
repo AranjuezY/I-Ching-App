@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
 }
 
 datasource db {
@@ -53,6 +54,7 @@ model texts {
   source              String
   section             String?
   content             String
+  translation         String?
   text_hexagram_links text_hexagram_links[]
   text_yao_links      text_yao_links[]
 }
