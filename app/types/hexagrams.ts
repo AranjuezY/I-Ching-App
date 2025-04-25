@@ -7,12 +7,7 @@ export interface HexagramName {
 export interface HexagramData {
   name: string
   sequence: string
-  guaci: Array<{ source: string; content: string }>
-  yaoci: Array<{
-    position: number
-    label: string | null
-    texts: Array<{ source: string; content: string }>
-  }>
+  guaci: Array<{ source: string; content: string; translation: string }>
   relations: {
     mutual: { name: string; sequence: string } | null
     reverse: { name: string; sequence: string } | null
