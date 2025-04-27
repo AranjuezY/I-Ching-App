@@ -1,0 +1,38 @@
+.plum-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+}
+
+.hexagrams {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.hexagram-container {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .plum-container {
+    padding: 2rem;
+  }
+  
+  .hexagrams {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -3,17 +3,19 @@ import { useState } from 'react';
 import Plum from '../components/plum/plum';
 import { plumGenerator } from '@/lib/utils/plum';
 import styles from './page.module.scss';
-import PlumLayout from './layout';
 
 export default function Page() {
     const [query, setQuery] = useState('');
     const [result, setResult] = useState<{
         hexagram: string;
         hexagramName: string | null;
+        hexagramTuanci: string | null;
         mutual: string;
         mutualName: string | null;
+        mutualTuanci: string | null;
         flipped: string;
         flippedName: string | null;
+        flippedTuanci: string | null;
         flipId: number | 0; // Not being used.
     } | null>(null);
     const [loading, setLoading] = useState(false);
@@ -46,48 +48,45 @@ export default function Page() {
     };
 
     return (
-        <PlumLayout
-            header={
-                <div className={styles.header}>
-                    <h1>Plum Blossom Numerology</h1>
-                    <p>梅花易数</p>
-                </div>
-            }
-            form={
-                <form onSubmit={handleSubmit} className={styles.plumForm}>
-                    <textarea
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Enter your question..."
-                        className={styles.plumInput}
-                        disabled={loading}
-                    />
-                    <button 
-                        type="submit" 
-                        className={styles.plumSubmit}
-                        disabled={loading}
-                    >
-                        {loading ? 'Generating...' : 'Generate Hexagram'}
-                    </button>
-                </form>
-            }
-            loading={loading && <div className={styles.loading}>Generating hexagram...</div>}
-            error={error && <div className={styles.error}>{error}</div>}
-            results={result && (
+        <div className={styles.container}>
+            <div className={styles.header}>
+                <h1>Plum Blossom Numerology</h1>
+                <p>梅花易数</p>
+            </div>
+            <form onSubmit={handleSubmit} className={styles.plumForm}>
+                <textarea
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Enter your question..."
+                    className={styles.plumInput}
+                    disabled={loading}
+                />
+                <button 
+                    type="submit" 
+                    className={styles.plumSubmit}
+                    disabled={loading}
+                >
+                    {loading ? 'Generating...' : 'Generate Hexagram'}
+                </button>
+            </form>
+            {loading && <div className={styles.loading}>Generating hexagram...</div>}
+            {error && <div className={styles.error}>{error}</div>}
+            {result && (
                 <div className={styles.results}>
                     <Plum
                         hexagram={result.hexagram}
                         hexagramName={result.hexagramName}
+                        hexagramTuanci={result.hexagramTuanci}
                         mutual={result.mutual}
                         mutualName={result.mutualName}
+                        mutualTuanci={result.mutualTuanci}
                         flipped={result.flipped}
                         flippedName={result.flippedName}
+                        flippedTuanci={result.flippedTuanci}
                         flipId={result.flipId}
                     />
                 </div>
             )}
-        >
-            {/* Additional children can be placed here */}
-        </PlumLayout>
+        </div>
     );
 }
