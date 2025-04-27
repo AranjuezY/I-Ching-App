@@ -4,16 +4,14 @@ import { useEffect, useState } from 'react'
 import { HexagramData, HexagramName } from './types/hexagrams'
 import ShowCase from './components/showcase/showcase'
 import HexagramPanel from './components/hexagram-panel/hexagram-panel'
-import Plum from './components/plum/plum'
 import styles from './page.module.scss'
+import Link from 'next/link'
 
 export default function Page() {
   const [hexagram, setHexagram] = useState<HexagramData | null>(null)
   const [allHexagrams, setAllHexagrams] = useState<HexagramName[]>([])
-  const [plumData, setPlumData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [namesLoading, setNamesLoading] = useState(true)
-  const [plumLoading, setPlumLoading] = useState(true)
 
   useEffect(() => {
     const fetchHexagrams = async () => {
@@ -28,24 +26,18 @@ export default function Page() {
         const hexResponse = await fetch('/api/hexagrams/1')
         const hexData = await hexResponse.json()
         setHexagram(hexData)
-
-        // Fetch plum data
-        const plumResponse = await fetch('/api/plum')
-        const plumData = await plumResponse.json()
-        setPlumData(plumData)
       } catch (error) {
         console.error('Error fetching data:', error)
       } finally {
         setLoading(false)
-        setPlumLoading(false)
       }
     }
 
     fetchHexagrams()
   }, [])
 
-  if (loading || namesLoading || plumLoading) return <div>Loading...</div>
-  if (!hexagram || !plumData) return <div>No data found</div>
+  if (loading || namesLoading) return <div>Loading...</div>
+  if (!hexagram) return <div>No data found</div>
 
   const handleHexagramClick = async (id: number) => {
     try {
@@ -66,8 +58,10 @@ export default function Page() {
         allHexagrams={allHexagrams} 
         onHexagramClick={handleHexagramClick} 
       />
+      <Link href="/plum" className={styles.plum}>
+        梅花易数 | Plum Blossom Numerology
+      </Link>
       <ShowCase hexagram={hexagram} />
-      <Plum {...plumData} />
     </div>
   )
 }

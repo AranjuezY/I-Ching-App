@@ -1,4 +1,3 @@
-import { plumGenerator } from '@/lib/utils/plum';
 import prisma from '@/lib/prisma';
 
 async function getHexagramName(hexagram: string) {
@@ -13,8 +12,12 @@ async function getHexagramName(hexagram: string) {
   return result?.hexagram_name;
 }
 
-export async function GET() {
-  const { hexagram, mutual, flipped, flipId } = plumGenerator();
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const hexagram = [searchParams.get('hexagram') || ''];
+  const mutual = [searchParams.get('mutual') || ''];
+  const flipped = [searchParams.get('flipped') || ''];
+  
   const hexagramName = await getHexagramName(hexagram[0]);
   const mutualName = await getHexagramName(mutual[0]);
   const flippedName = await getHexagramName(flipped[0]);
@@ -26,6 +29,5 @@ export async function GET() {
     mutualName: mutualName,
     flipped: flipped[0],
     flippedName: flippedName,
-    flipId: flipId
   });
 }
