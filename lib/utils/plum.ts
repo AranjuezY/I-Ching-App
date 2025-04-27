@@ -1,4 +1,4 @@
-export default function meihuaGenerator() {
+export function plumGenerator() {
   const mapper = ['000', '111', '011', '101', '001', '110', '010', '100'];
   const now = new Date();
   const year = now.getFullYear();
