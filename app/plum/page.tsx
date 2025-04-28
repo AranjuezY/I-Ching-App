@@ -1,12 +1,10 @@
 'use client';
 import { useState } from 'react';
-import { useChat } from '@ai-sdk/react';
 import Plum from '../components/plum/plum';
 import { plumGenerator } from '@/lib/utils/plum';
 import styles from './page.module.scss';
 
 export default function Page() {
-    const { messages, input, setInput, handleSubmit } = useChat();
     const [query, setQuery] = useState('');
     const [result, setResult] = useState<{
         hexagram: string;
@@ -23,7 +21,6 @@ export default function Page() {
     const [chatResponse, setChatResponse] = useState<string>('');
     const [savedQuestion, setSavedQuestion] = useState<string>('');
     const [loading, setLoading] = useState(false);
-    const [chatLoading, setChatLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const handlePlum = async (e: React.FormEvent) => {
@@ -32,7 +29,7 @@ export default function Page() {
         setError(null);
         setSavedQuestion(query);
         setChatResponse('');
-        
+
         try {
             const generated = plumGenerator();
             const params = new URLSearchParams({
@@ -49,8 +46,28 @@ export default function Page() {
             setResult(data);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Unknown error occurred');
-        } finally {
-            setLoading(false);
+        }
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    question: savedQuestion,
+                    hexagram: result?.hexagramName,
+                    mutual: result?.mutualName,
+                    flipped: result?.flippedName,
+                }),
+            });
+            const data = await response.json();
+            setChatResponse(data.response);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Unknown error occurred');
         }
     };
 
@@ -68,8 +85,8 @@ export default function Page() {
                     className={styles.plumInput}
                     disabled={loading}
                 />
-                <button 
-                    type="submit" 
+                <button
+                    type="submit"
                     className={styles.plumSubmit}
                     disabled={loading}
                 >
@@ -92,18 +109,13 @@ export default function Page() {
                         flippedTuanci={result.flippedTuanci}
                         flipId={result.flipId}
                     />
-            {!chatResponse && result && (
-                <form onSubmit={handleSubmit} className={styles.chatForm}>
-                    <input defaultValue={savedQuestion} style={{display: 'none'}}></input>
-                    <button type='submit' disabled={chatLoading}>{chatLoading ? 'Generating Interpretation...' : 'Get Interpretation'}</button>
-                </form>
-            )}
-            {chatResponse && (
-                <div className={styles.chatResponse}>
-                    <h2>Chat Response</h2>
-                    <p>{chatResponse}</p>
-                </div>
-            )}
+                    <button onClick={handleSubmit} className={styles.chatSubmit}>Ask</button>
+                    {chatResponse && (
+                        <div className={styles.chatResponse}>
+                            <h2>Chat Response</h2>
+                            <div>{chatResponse}</div>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
