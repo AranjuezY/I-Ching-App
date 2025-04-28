@@ -1,10 +1,12 @@
 'use client';
 import { useState } from 'react';
+import { useChat } from '@ai-sdk/react';
 import Plum from '../components/plum/plum';
 import { plumGenerator } from '@/lib/utils/plum';
 import styles from './page.module.scss';
 
 export default function Page() {
+    const { messages, input, setInput, handleSubmit } = useChat();
     const [query, setQuery] = useState('');
     const [result, setResult] = useState<{
         hexagram: string;
@@ -18,13 +20,18 @@ export default function Page() {
         flippedTuanci: string | null;
         flipId: number | 0; // Not being used.
     } | null>(null);
+    const [chatResponse, setChatResponse] = useState<string>('');
+    const [savedQuestion, setSavedQuestion] = useState<string>('');
     const [loading, setLoading] = useState(false);
+    const [chatLoading, setChatLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handlePlum = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
+        setSavedQuestion(query);
+        setChatResponse('');
         
         try {
             const generated = plumGenerator();
@@ -53,7 +60,7 @@ export default function Page() {
                 <h1>Plum Blossom Numerology</h1>
                 <p>梅花易数</p>
             </div>
-            <form onSubmit={handleSubmit} className={styles.plumForm}>
+            <form onSubmit={handlePlum} className={styles.plumForm}>
                 <textarea
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
@@ -85,6 +92,18 @@ export default function Page() {
                         flippedTuanci={result.flippedTuanci}
                         flipId={result.flipId}
                     />
+            {!chatResponse && result && (
+                <form onSubmit={handleSubmit} className={styles.chatForm}>
+                    <input defaultValue={savedQuestion} style={{display: 'none'}}></input>
+                    <button type='submit' disabled={chatLoading}>{chatLoading ? 'Generating Interpretation...' : 'Get Interpretation'}</button>
+                </form>
+            )}
+            {chatResponse && (
+                <div className={styles.chatResponse}>
+                    <h2>Chat Response</h2>
+                    <p>{chatResponse}</p>
+                </div>
+            )}
                 </div>
             )}
         </div>

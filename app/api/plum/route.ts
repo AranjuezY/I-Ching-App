@@ -27,7 +27,6 @@ async function getHexagramTuanci(hexagramId: number) {
       content: true
     }
   });
-  console.log(`id: ${hexagramId}; tuanci: ${result}`)
   return result?.content || null;
 }
 

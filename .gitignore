@@ -30,3 +30,5 @@ generated/
 # Cache
 .cache/
 .turbo/
+.vercel
+.env*.local
