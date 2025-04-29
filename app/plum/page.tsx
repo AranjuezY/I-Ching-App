@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Plum from '../components/plum/plum';
 import { plumGenerator } from '@/lib/utils/plum';
 import styles from './page.module.scss';
@@ -21,12 +21,31 @@ export default function Page() {
     const [chatResponse, setChatResponse] = useState<string>('');
     const [savedQuestion, setSavedQuestion] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
+    const [askedToday, setaskedToday] = useState(false);
+    const [interpreted, setInterpreted] = useState(false);
+
+    useEffect(() => {
+        const lastUsed = localStorage.getItem('plumLastUsedDate');
+        if (lastUsed) {
+            const lastUsedDate = new Date(lastUsed);
+            const today = new Date();
+            setaskedToday(
+                lastUsedDate.getDate() === today.getDate() &&
+                lastUsedDate.getMonth() === today.getMonth() &&
+                lastUsedDate.getFullYear() === today.getFullYear()
+            );
+        }
+    }, []);
 
     const handlePlum = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (askedToday) return;
+        
         setError(null);
         setSavedQuestion(query);
         setChatResponse('');
+        localStorage.setItem('plumLastUsedDate', new Date().toISOString());
+        setaskedToday(true);
 
         try {
             const generated = plumGenerator();
@@ -49,6 +68,7 @@ export default function Page() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setInterpreted(true);
         try {
             const response = await fetch('/api/chat', {
                 method: 'POST',
@@ -89,10 +109,16 @@ export default function Page() {
                 <textarea
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Enter your question..."
+                    placeholder="Enter your question. Only one question in one day..."
                     className={styles.plumInput}
                 />
-                <button type="submit" className={styles.plumSubmit}>Generate Hexagram</button>
+                <button 
+                    type="submit" 
+                    className={styles.plumSubmit}
+                    disabled={askedToday}
+                >
+                    {askedToday ? 'You have asked today' : 'Generate Hexagram'}
+                </button>
             </form>
             {error && <div className={styles.error}>{error}</div>}
             {result && (
@@ -109,7 +135,7 @@ export default function Page() {
                         flippedTuanci={result.flippedTuanci}
                         flipId={result.flipId}
                     />
-                    <button onClick={handleSubmit} className={styles.chatSubmit}>Ask</button>
+                    <button onClick={handleSubmit} className={styles.chatSubmit} disabled={interpreted}>See Interpretation</button>
                     {chatResponse && (
                         <div className={styles.chatResponse}>
                             <h2>Chat Response</h2>
