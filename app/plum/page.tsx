@@ -20,12 +20,10 @@ export default function Page() {
     } | null>(null);
     const [chatResponse, setChatResponse] = useState<string>('');
     const [savedQuestion, setSavedQuestion] = useState<string>('');
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const handlePlum = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError(null);
         setSavedQuestion(query);
         setChatResponse('');
@@ -64,8 +62,18 @@ export default function Page() {
                     flipped: result?.flippedName,
                 }),
             });
-            const data = await response.json();
-            setChatResponse(data.response);
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let accumulatedResponse = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                accumulatedResponse += chunk;
+                setChatResponse(accumulatedResponse);
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Unknown error occurred');
         }
@@ -83,17 +91,9 @@ export default function Page() {
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Enter your question..."
                     className={styles.plumInput}
-                    disabled={loading}
                 />
-                <button
-                    type="submit"
-                    className={styles.plumSubmit}
-                    disabled={loading}
-                >
-                    {loading ? 'Generating...' : 'Generate Hexagram'}
-                </button>
+                <button type="submit" className={styles.plumSubmit}>Generate Hexagram</button>
             </form>
-            {loading && <div className={styles.loading}>Generating hexagram...</div>}
             {error && <div className={styles.error}>{error}</div>}
             {result && (
                 <div className={styles.results}>

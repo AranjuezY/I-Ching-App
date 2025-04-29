@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { HexagramData, HexagramName } from './types/hexagrams'
 import ShowCase from './components/showcase/showcase'
-import HexagramPanel from './components/hexagram-panel/hexagram-panel'
+import HexagramPanel from './components/hexagramPanel/hexagramPanel'
 import styles from './page.module.scss'
 import Link from 'next/link'
 

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { HexagramName } from '../../types/hexagrams'
-import styles from './hexagram-panel.module.scss'
+import styles from './hexagramPanel.module.scss'
 
 interface HexagramPanelProps {
   allHexagrams: HexagramName[]
